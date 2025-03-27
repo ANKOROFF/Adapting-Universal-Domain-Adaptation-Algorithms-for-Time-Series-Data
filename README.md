@@ -159,19 +159,18 @@ Key advantages:
 
 The RAINCOAT optimization objective can be formulated as:
 
-$$\mathcal{L}_{\text{RAINCOAT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{rec}} \mathcal{L}_{\text{rec}} + \lambda_{\text{sink}} \mathcal{L}_{\text{sink}} + \lambda_{\text{contrast}} \mathcal{L}_{\text{contrast}}$$
+L_RAINCOAT = L_cls + λ_rec * L_rec + λ_sink * L_sink + λ_contrast * L_contrast
 
 where:
-- $$\mathcal{L}_{\text{cls}} = -\sum_{i=1}^{n_s} \sum_{c=1}^{C} y_i^c \log(\hat{y}_i^c)$$
-- $$\mathcal{L}_{\text{rec}} = \frac{1}{n_s} \sum_{i=1}^{n_s} \|x_i - \hat{x}_i\|^2$$
-- $$\mathcal{L}_{\text{sink}} = \langle \mathbf{P}, \mathbf{C} \rangle$$, where $$\mathbf{P}$$ is the optimal transport plan computed via Sinkhorn algorithm
-- $$\mathcal{L}_{\text{contrast}}$$ is the contrastive loss for semantic alignment
+- L_cls = -Σ_{i=1}^{n_s} Σ_{c=1}^{C} y_i^c * log(ŷ_i^c)  # Classification loss
+- L_rec = (1/n_s) * Σ_{i=1}^{n_s} ||x_i - x̂_i||^2       # Reconstruction loss
+- L_sink = <P, C>                                       # Sinkhorn loss (P is transport plan)
+- L_contrast is the contrastive loss for semantic alignment
 
 The DIP-test for multi-modality detection is defined as:
+DIP(x) = sup_{t ∈ [0,1]} |F_n(t) - t|
 
-$$\text{DIP}(x) = \sup_{t \in [0,1]} |F_n(t) - t|$$
-
-where $$F_n$$ is the empirical CDF of the data.
+where F_n is the empirical CDF of the data
 
 ### UniOT
 
@@ -185,18 +184,16 @@ UniOT (Unidirectional Optimal Transport) implements adaptation based on unidirec
 **Mathematical Formulation**:
 
 The UniOT optimization objective:
+L_UniOT = L_cls + λ_ot * L_ot
 
-$$\mathcal{L}_{\text{UniOT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{ot}} \mathcal{L}_{\text{ot}}$$
-
-The optimal transport loss $$\mathcal{L}_{\text{ot}}$$ is computed as:
-
-$$\mathcal{L}_{\text{ot}} = \min_{\mathbf{P} \in \Pi(\mu_s, \mu_t)} \langle \mathbf{P}, \mathbf{C} \rangle - \epsilon H(\mathbf{P})$$
+The optimal transport loss L_ot is computed as:
+L_ot = min_{P ∈ Π(μ_s, μ_t)} <P, C> - ε*H(P)
 
 where:
-- $$\Pi(\mu_s, \mu_t)$$ is the set of transport plans
-- $$\mathbf{C}$$ is the cost matrix
-- $$\epsilon$$ is the regularization parameter
-- $$H(\mathbf{P})$$ is the entropy of the transport plan
+- Π(μ_s, μ_t) is the set of transport plans
+- C is the cost matrix
+- ε is the regularization parameter
+- H(P) is the entropy of the transport pla
 
 The Sinkhorn algorithm solves this by iterative updates:
 
@@ -216,18 +213,13 @@ DANCE (Domain Adaptation with Neighborhood Consistency and Entropy minimization)
 **Mathematical Formulation**:
 
 The DANCE optimization objective:
+L_DANCE = L_cls + λ_nc * L_nc + λ_ent * L_ent
 
-$$\mathcal{L}_{\text{DANCE}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{nc}} \mathcal{L}_{\text{nc}} + \lambda_{\text{ent}} \mathcal{L}_{\text{ent}}$$
+The neighborhood consistency loss L_nc is:
+L_nc = (1/n_t) * Σ_{i=1}^{n_t} Σ_{j ∈ N_k(i)} ||ŷ_i - ŷ_j||^2 * w_ij
 
-The neighborhood consistency loss $$\mathcal{L}_{\text{nc}}$$ is:
-
-$$\mathcal{L}_{\text{nc}} = \frac{1}{n_t} \sum_{i=1}^{n_t} \sum_{j \in \mathcal{N}_k(i)} \|\hat{y}_i - \hat{y}_j\|^2 w_{ij}$$
-
-where $$\mathcal{N}_k(i)$$ is the set of k-nearest neighbors of sample $$i$$, and $$w_{ij}$$ is the similarity weight.
-
-The entropy minimization loss $$\mathcal{L}_{\text{ent}}$$ is:
-
-$$\mathcal{L}_{\text{ent}} = -\frac{1}{n_t} \sum_{i=1}^{n_t} \sum_{c=1}^{C} \hat{y}_i^c \log(\hat{y}_i^c)$$
+The entropy minimization loss L_ent is:
+L_ent = -(1/n_t) * Σ_{i=1}^{n_t} Σ_{c=1}^{C} ŷ_i^c * log(ŷ_i^c)
 
 ## Running Experiments
 

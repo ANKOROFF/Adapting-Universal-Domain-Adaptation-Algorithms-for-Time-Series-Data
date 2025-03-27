@@ -270,6 +270,7 @@ The following metrics are used to evaluate domain adaptation methods:
 Experiments are conducted on two types of scenarios:
 - **W→H**: WISDM → HHAR_SA (9 different domain combinations)
 - **H→W**: HHAR_SA → WISDM (9 different domain combinations)
+- **W→W**: WISDM → WISDM (9 different domain combinations)
 
 ### Feature Visualization
 

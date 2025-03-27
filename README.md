@@ -274,7 +274,7 @@ $$\mathcal{L}_{\text{OVANet}} = \mathcal{L}_{\text{ova}} + \lambda_{\text{d}} \m
 
 The one-vs-all loss $\mathcal{L}_{\text{ova}}$ is:
 
-$$\mathcal{L}_{\text{ova}} = -\frac{1}{n_s} \sum_{i=1}^{n_s} \sum_{c=1}^{C} \left[ y_i^c \log(\sigma(f_c(x_i))) + (1-y_i^c) \log(1-\sigma(f_c(x_i))) \right]$$
+$$\mathcal{L}_{\text{ova}} = -\frac{1}{n_s} \sum_{i=1}^{n_s} \sum_{c=1}^{C} \left y_i^c \log(\sigma(f_c(x_i))) + (1-y_i^c) \log(1-\sigma(f_c(x_i))) \right$$
 
 where $f_c$ is the binary classifier for class $c$ and $\sigma$ is the sigmoid function.
 
@@ -515,19 +515,6 @@ python -m unittest discover
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
-
-## Citation
-
-If you use this code in your research, please cite our work:
-
-```bibtex
-@article{raincoat2023,
-  title={RAINCOAT: Robust Domain Adaptation for Human Activity Recognition with Cross-domain Optimal Transport},
-  author={Author1 and Author2 and Author3},
-  journal={ArXiv},
-  year={2023}
-}
-```
 
 ## Contact
 

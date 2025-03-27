@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "../.git"
+		},
+		{
+			"path": "../__pycache__"
+		},
+		{
+			"path": "../algorithms"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../data"
+		},
+		{
+			"path": "../dataloader"
+		},
+		{
+			"path": "../experiments_logs"
+		},
+		{
+			"path": "../models"
+		},
+		{
+			"path": "../scripts"
+		},
+		{
+			"path": "../trainers"
+		}
+	]
+}

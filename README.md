@@ -44,7 +44,7 @@ The project implements several state-of-the-art domain adaptation methods:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Raincoat.git
+git clone https://github.com/ANKOROFF/Adapting-Universal-Domain-Adaptation-Algorithms-for-Time-Series-Data
 cd Raincoat
 ```
 

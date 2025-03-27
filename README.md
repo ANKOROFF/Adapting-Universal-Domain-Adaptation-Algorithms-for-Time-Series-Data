@@ -159,17 +159,19 @@ Key advantages:
 
 The RAINCOAT optimization objective can be formulated as:
 
-$\mathcal{L}_{\text{RAINCOAT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{rec}} \mathcal{L}_{\text{rec}} + \lambda_{\text{sink}} \mathcal{L}_{\text{sink}} + \lambda_{\text{contrast}} \mathcal{L}_{\text{contrast}}$
+$$\mathcal{L}_{\text{RAINCOAT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{rec}} \mathcal{L}_{\text{rec}} + \lambda_{\text{sink}} \mathcal{L}_{\text{sink}} + \lambda_{\text{contrast}} \mathcal{L}_{\text{contrast}}$$
 
 where:
-- $\mathcal{L}_{\text{cls}}$ is the cross-entropy loss on source domain: $\mathcal{L}_{\text{cls}} = -\sum_{i=1}^{n_s} \sum_{c=1}^{C} y_i^c \log(\hat{y}_i^c)$
-- $\mathcal{L}_{\text{rec}}$ is the reconstruction loss: $\mathcal{L}_{\text{rec}} = \frac{1}{n_s} \sum_{i=1}^{n_s} \|x_i - \hat{x}_i\|^2$
-- $\mathcal{L}_{\text{sink}}$ is the Sinkhorn loss: $\mathcal{L}_{\text{sink}} = \langle \mathbf{P}, \mathbf{C} \rangle$, where $\mathbf{P}$ is the optimal transport plan computed via Sinkhorn algorithm
-- $\mathcal{L}_{\text{contrast}}$ is the contrastive loss for semantic alignment
+- $$\mathcal{L}_{\text{cls}} = -\sum_{i=1}^{n_s} \sum_{c=1}^{C} y_i^c \log(\hat{y}_i^c)$$
+- $$\mathcal{L}_{\text{rec}} = \frac{1}{n_s} \sum_{i=1}^{n_s} \|x_i - \hat{x}_i\|^2$$
+- $$\mathcal{L}_{\text{sink}} = \langle \mathbf{P}, \mathbf{C} \rangle$$, where $$\mathbf{P}$$ is the optimal transport plan computed via Sinkhorn algorithm
+- $$\mathcal{L}_{\text{contrast}}$$ is the contrastive loss for semantic alignment
 
 The DIP-test for multi-modality detection is defined as:
+
 $$\text{DIP}(x) = \sup_{t \in [0,1]} |F_n(t) - t|$$
-where $F_n$ is the empirical CDF of the data.
+
+where $$F_n$$ is the empirical CDF of the data.
 
 ### UniOT
 
@@ -186,21 +188,21 @@ The UniOT optimization objective:
 
 $$\mathcal{L}_{\text{UniOT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{ot}} \mathcal{L}_{\text{ot}}$$
 
-The optimal transport loss $\mathcal{L}_{\text{ot}}$ is computed as:
+The optimal transport loss $$\mathcal{L}_{\text{ot}}$$ is computed as:
 
 $$\mathcal{L}_{\text{ot}} = \min_{\mathbf{P} \in \Pi(\mu_s, \mu_t)} \langle \mathbf{P}, \mathbf{C} \rangle - \epsilon H(\mathbf{P})$$
 
 where:
-- $\Pi(\mu_s, \mu_t)$ is the set of transport plans
-- $\mathbf{C}$ is the cost matrix
-- $\epsilon$ is the regularization parameter
-- $H(\mathbf{P})$ is the entropy of the transport plan
+- $$\Pi(\mu_s, \mu_t)$$ is the set of transport plans
+- $$\mathbf{C}$$ is the cost matrix
+- $$\epsilon$$ is the regularization parameter
+- $$H(\mathbf{P})$$ is the entropy of the transport plan
 
 The Sinkhorn algorithm solves this by iterative updates:
 
 $$\mathbf{u}^{l+1} = \frac{\mathbf{a}}{\mathbf{K}\mathbf{v}^l}, \quad \mathbf{v}^{l+1} = \frac{\mathbf{b}}{\mathbf{K}^T\mathbf{u}^{l+1}}$$
 
-where $\mathbf{K} = e^{-\mathbf{C}/\epsilon}$.
+where $$\mathbf{K} = e^{-\mathbf{C}/\epsilon}$$.
 
 ### DANCE
 
@@ -217,135 +219,15 @@ The DANCE optimization objective:
 
 $$\mathcal{L}_{\text{DANCE}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{nc}} \mathcal{L}_{\text{nc}} + \lambda_{\text{ent}} \mathcal{L}_{\text{ent}}$$
 
-The neighborhood consistency loss $\mathcal{L}_{\text{nc}}$ is:
+The neighborhood consistency loss $$\mathcal{L}_{\text{nc}}$$ is:
 
 $$\mathcal{L}_{\text{nc}} = \frac{1}{n_t} \sum_{i=1}^{n_t} \sum_{j \in \mathcal{N}_k(i)} \|\hat{y}_i - \hat{y}_j\|^2 w_{ij}$$
 
-where $\mathcal{N}_k(i)$ is the set of k-nearest neighbors of sample $i$, and $w_{ij}$ is the similarity weight.
+where $$\mathcal{N}_k(i)$$ is the set of k-nearest neighbors of sample $$i$$, and $$w_{ij}$$ is the similarity weight.
 
-The entropy minimization loss $\mathcal{L}_{\text{ent}}$ is:
+The entropy minimization loss $$\mathcal{L}_{\text{ent}}$$ is:
 
 $$\mathcal{L}_{\text{ent}} = -\frac{1}{n_t} \sum_{i=1}^{n_t} \sum_{c=1}^{C} \hat{y}_i^c \log(\hat{y}_i^c)$$
-
-### UAN
-
-UAN (Universal Adaptation Network):
-
-- Uses domain discriminator to determine sample relevance
-- Implements weighted transfer based on entropy
-- Includes self-training mechanism on target domain
-- Adaptively adjusts weight of each sample
-
-**Mathematical Formulation**:
-
-The UAN optimization objective:
-
-$$\mathcal{L}_{\text{UAN}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{d}} \mathcal{L}_{\text{d}} - \lambda_{\text{ent}} \mathcal{L}_{\text{ent}}$$
-
-The domain discriminator loss $\mathcal{L}_{\text{d}}$ is:
-
-$$\mathcal{L}_{\text{d}} = -\frac{1}{n_s} \sum_{i=1}^{n_s} \log(D(f(x_i^s))) - \frac{1}{n_t} \sum_{i=1}^{n_t} \log(1 - D(f(x_i^t)))$$
-
-where $D$ is the domain discriminator.
-
-The weight assignment based on entropy is:
-
-$$w_i = \begin{cases}
-1, & \text{if } H(\hat{y}_i) < \eta \\
-0, & \text{otherwise}
-\end{cases}$$
-
-where $\eta$ is the entropy threshold.
-
-### OVANet
-
-OVANet (One vs All Network):
-
-- Implements binary classifiers for each class
-- Uses contrastive metrics between classes
-- Includes regularization for improved generalization
-- Applies ensembling for final prediction
-
-**Mathematical Formulation**:
-
-The OVANet optimization objective:
-
-$$\mathcal{L}_{\text{OVANet}} = \mathcal{L}_{\text{ova}} + \lambda_{\text{d}} \mathcal{L}_{\text{d}}$$
-
-The one-vs-all loss $\mathcal{L}_{\text{ova}}$ is:
-
-$$\mathcal{L}_{\text{ova}} = -\frac{1}{n_s} \sum_{i=1}^{n_s} \sum_{c=1}^{C} \left y_i^c \log(\sigma(f_c(x_i))) + (1-y_i^c) \log(1-\sigma(f_c(x_i))) \right$$
-
-where $f_c$ is the binary classifier for class $c$ and $\sigma$ is the sigmoid function.
-
-## Neural Network Architectures
-
-### CNN (Convolutional Neural Network)
-
-Basic architecture for time series processing:
-
-- 3 convolutional blocks with increasing number of filters (32 → 64 → 128)
-- Each block: Conv1d → BatchNorm → ReLU → MaxPool → Dropout
-- Final layer: AdaptiveAvgPool → Linear
-
-Features:
-- Simplicity and training efficiency
-- Good performance with local patterns
-- Fewer parameters
-
-**Mathematical Formulation**:
-
-For 1D convolution:
-
-$$(\text{Conv1D}(x))_t = \sum_{i=0}^{k-1} w_i \cdot x_{t+i}$$
-
-where $k$ is the kernel size and $w$ are the weights.
-
-### TCN (Temporal Convolutional Network)
-
-Specialized architecture for time series:
-
-- Dilated convolutions with exponentially growing receptive field
-- Residual blocks for improved gradient flow
-- Preservation of temporal dimension
-
-Features:
-- Improved perception of long-term dependencies
-- Efficiency for long sequences
-- Training stability thanks to residual connections
-
-**Mathematical Formulation**:
-
-For dilated convolution with dilation factor $d$:
-
-$$(\text{DilatedConv1D}(x))_t = \sum_{i=0}^{k-1} w_i \cdot x_{t+d \cdot i}$$
-
-The residual connection is defined as:
-
-$$y = \mathcal{F}(x) + x$$
-
-where $\mathcal{F}$ is the function to be learned.
-
-### TCNAttention
-
-Enhanced version of TCN with attention mechanism:
-
-- Basic TCN structure
-- Addition of Self-Attention mechanism
-- Dynamic focus on important parts of the sequence
-
-Features:
-- Most flexible architecture
-- Better adaptability to different domain differences
-- Improved performance with heterogeneous data
-
-**Mathematical Formulation**:
-
-The self-attention mechanism is defined as:
-
-$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
-
-where $Q$, $K$, and $V$ are query, key, and value matrices, and $d_k$ is the dimension of keys.
 
 ## Running Experiments
 

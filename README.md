@@ -159,7 +159,7 @@ Key advantages:
 
 The RAINCOAT optimization objective can be formulated as:
 
-$$\mathcal{L}_{\text{RAINCOAT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{rec}} \mathcal{L}_{\text{rec}} + \lambda_{\text{sink}} \mathcal{L}_{\text{sink}} + \lambda_{\text{contrast}} \mathcal{L}_{\text{contrast}}$$
+$\mathcal{L}_{\text{RAINCOAT}} = \mathcal{L}_{\text{cls}} + \lambda_{\text{rec}} \mathcal{L}_{\text{rec}} + \lambda_{\text{sink}} \mathcal{L}_{\text{sink}} + \lambda_{\text{contrast}} \mathcal{L}_{\text{contrast}}$
 
 where:
 - $\mathcal{L}_{\text{cls}}$ is the cross-entropy loss on source domain: $\mathcal{L}_{\text{cls}} = -\sum_{i=1}^{n_s} \sum_{c=1}^{C} y_i^c \log(\hat{y}_i^c)$
